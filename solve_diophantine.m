@@ -1,3 +1,4 @@
+%
 %	diophantine equation states: 
 %
 %	A*R' + B_n*S = A0*Am = Ac'
@@ -12,15 +13,16 @@
 % 	A0 - sth weird for now
 %	Am - model denominator
 %	Ac'- characteristic polynomial / B_c
+%	
 
-function [S, R] = solve_diophantine(B, A, Bm, Am, A0)
+function [S, T, R] = solve_diophantine(B, A, Bm, Am, A0)
 	critical_rel_damping=0.7;
 	[B_n, B_c] = factor_B(B, critical_rel_damping);
 
-	deg_A0		= deg(A)(2)-deg(B_c)(2)-1;
-	deg_Ac_min 	= 2*deg(A)(2)-1;
-	deg_R		= deg_Ac_min-deg(A)(2);
-	deg_R_prime	= deg_R - deg(B_c)(2)
+	deg_A0		= deg(A)-deg(B_c)-1;
+	deg_Ac_min 	= 2*deg(A)-1;
+	deg_R		= deg_Ac_min-deg(A);
+	deg_R_prime	= deg_R - deg(B_c);
 
 	A0		= ones(1,deg_A0+1);
 	R_prime		= ones(1,deg_R_prime+1);
@@ -31,7 +33,9 @@ function [S, R] = solve_diophantine(B, A, Bm, Am, A0)
 	S 		= (conv(A, R_prime) - conv(A0, Am)) ./B_n;
 
 
-	R = conv(R_prime, B_c);	
+	R 		= conv(R_prime, B_c);	
+
+	T	 	= conv(A0, (Bm ./ B_n) );
 end
 
 
