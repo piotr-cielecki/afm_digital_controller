@@ -1,0 +1,47 @@
+function [x, y] = regulation_loop(setpoint)
+N_acq = 300;
+Period = 100;
+Delta = 0.5;
+Update_regulator_each_N_samples = 1;
+
+x_padding = 1;
+y_padding = 1;
+
+
+Ones_in_period = Period*Delta;
+n = 0 : N_acq-1;
+
+setpoint = zeros(1, N_acq);
+
+for i = 1 : Period : N_acq-Period,
+	setpoint(i : i+Ones_in_period-1) = ones(1,Ones_in_period); 
+endfor
+
+x = [zeros(1, x_padding-1), zeros(1, N_acq)];
+y = [zeros(1, y_padding-1), zeros(1, N_acq)];
+
+next_input_val = 0;
+for n = 1 : N_acq-1,
+	y(n+y_padding) = model(x(n+x_padding-1), y(n+y_padding-1));%		x(n-x_padding+1:n)	, 		y(n-y_padding+1:n)	);
+	if(Regulator_update_ctr == Update_regulator_each_N_samples)
+		next_input_val = regulate(y(n), setpoint(n));
+		Regulator_update_ctr = 0;
+	else
+		Regulator_update_ctr = Regulator_update_ctr + 1;
+	endif
+	
+	x(n+1) = next_input_val;
+endfor
+
+for n = 1 : N_acq,
+	y_out(n) = y(n+y_padding-1);
+endfor
+
+n = 0 : N_acq - 1;
+plot(n, x, color = "r", n, y_out, color = "b");
+
+pause;
+
+rmpath Models/RC_const
+rmpath Regulators/Dummy
+rmpath utils

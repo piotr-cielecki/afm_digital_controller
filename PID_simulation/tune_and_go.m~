@@ -1,0 +1,21 @@
+addpath Models/Cheby4o
+addpath Regulators/PID
+addpath Tuners/Relay_ZN
+addpath utils
+
+
+[kp, ki, kd] = autotune();
+
+printf("kp = %f\tki = %f\tkd = %f", kp, ki, kd);
+
+save "Regulators/PID/coefs.txt" kp ki kd;
+
+steps();
+
+
+rmpath Models/Cheby4o
+rmpath Regulators/PID
+addpath Tuners/Relay_ZN
+rmpath utils
+
+

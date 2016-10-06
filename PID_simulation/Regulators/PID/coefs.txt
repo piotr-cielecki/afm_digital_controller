@@ -1,0 +1,16 @@
+# Created by Octave 4.0.2, Thu Oct 06 19:42:04 2016 CEST <piotr@piotr-Lenovo-B590>
+# name: kp
+# type: scalar
+0.514939803837238
+
+
+# name: ki
+# type: scalar
+0.01569938426333043
+
+
+# name: kd
+# type: scalar
+0
+
+

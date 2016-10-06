@@ -1,0 +1,22 @@
+function [x_out, y_out, kp, ki] = relay_loop(relay_setpoint)
+
+	x_padding = 1;
+	y_padding = 1;
+
+	N_acq = RelayTest_len;
+
+	for n = 1 : N_acq-1,
+
+		x(n+x_padding+1) = relay( x(n+x_padding) - relay_setpoint(n) );
+
+		y(n+y_padding+1) = model(x(n+x_padding+1), y(n+y_padding));%		x(n-x_padding+1:n)	, 		y(n-y_padding+1:n)	);
+	endfor
+
+	for n = 1 : N_acq,
+		y_out(n) = y(n+y_padding-1);
+		x_out(n) = x(n+x_padding-1);
+	endfor
+	
+	ki = kp = 0;
+
+endfunction

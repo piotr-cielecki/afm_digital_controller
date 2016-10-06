@@ -1,0 +1,9 @@
+1;
+
+function [y] = act_on_system(x)
+	b(1) = 0.15;
+	a(1) = 1;
+	a(2) = 0.85;
+
+	y = IIR_filter(b, a, x);
+endfunction	
